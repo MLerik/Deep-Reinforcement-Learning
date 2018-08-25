@@ -98,11 +98,11 @@ class Agent():
         if double_dqn:
             # Double DQN
             q_best_action = self.qnetwork_local(next_states).max(1)[1]
-            Q_targets_next = self.qnetwork_target(next_states).gather(1, q_best_action.unsqueeze(-1)).squeeze(-1)
-            #Q_targets_next = self.qnetwork_target(next_states).gather(1, q_best_action)
+            Q_targets_next = self.qnetwork_target(next_states).gather(1, q_best_action.unsqueeze(-1))
+        #Q_targets_next = self.qnetwork_target(next_states).gather(1, q_best_action)
         else:
-            # DQN
-            Q_targets_next = self.qnetwork_target(next_states).detach().max(1)[0].unsqueeze(1)
+        # DQN
+            Q_targets_next = self.qnetwork_target(next_states).detach().max(1)[0].unsqueeze(-1)
 
             # Compute Q targets for current states
 
