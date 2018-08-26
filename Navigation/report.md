@@ -47,7 +47,7 @@ For the BananaBrain environment a neural network with 2 hidden layers with 64 hi
 To receive Q-Value estimations for a given state, a forward pass through the network is perfomed. In order to chose an action from these Q-Values we need a policy which the agent follows.
 
 #### Epsilon-greedy policy
-The so called epsilon-greedy policy is used to chose an action from the given Q-Value approximations. In this policy the agent will choose the action with the highest Q-Value with a probability of 1-epsilon and a random action with the probability of epsilon. This policy is good for training as it can be shown that it will converge to the optimal policy.
+The so called epsilon-greedy policy is used to chose an action from the given Q-Value approximations. In this policy the agent will choose the action with the highest Q-Value with a probability of P(a(maxQ) = 1-epsilon and a random action with the probability of epsilon. This policy is good for training as it can be shown that it will converge to the optimal policy.
 
 #### Enhancements to basic DQN Network: Dueling DQN
 [image2]:https://github.com/androiddeverik/Deep-Reinforcement-Learning/blob/master/Navigation/dueling.png
@@ -66,6 +66,18 @@ To reduce the problem of the moving target we can further enhance our network by
 This improvement is simple implemented by generating a copy of the neural network and using this copied network to predict the Q-values. Furthermore an update strategy for this copied network needs to be implemented. In my case I chose to update the weights as a convex combination of the current network weights and the network weights of the trained network. In this case we end up with a slowly evovling network which keeps our Q-Value targets more stable during training.
 
 #### Final network structure
+[image3]:https://github.com/androiddeverik/Deep-Reinforcement-Learning/blob/master/Navigation/neural_net.png
+![Network][image3]
+
+The image above illustrates the final network structure used for training and the table below shows the specific implementation and chosen parameters for each subnet.
+
+Layer | Action Value Net | State Value net
+------------ | ------------ | -------------
+Input | 37 | 37
+Hidden 1 | 64 | 64
+Hidden 2 | 64 | 64
+Output | 4 | 1
+
 
 
 <a name="train"></a>
