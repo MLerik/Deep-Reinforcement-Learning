@@ -38,4 +38,4 @@ The task is episodic, and in order to solve the environment, your agent must get
 ### Instructions
 
 Follow the instructions in `Navigation.ipynb` to see how the agent performs during and after training.
-Read the report(https://github.com/androiddeverik/Deep-Reinforcement-Learning/blob/master/Navigation/report.md) to see details about the chosen model, hyperparameters and additional considerations
+Read the [report](https://github.com/androiddeverik/Deep-Reinforcement-Learning/blob/master/Navigation/report.md) to see details about the chosen model, hyperparameters and additional considerations
