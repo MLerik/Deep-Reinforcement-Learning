@@ -11,7 +11,7 @@ BUFFER_SIZE = int(1e5)  # replay buffer size
 BATCH_SIZE = 64  # minibatch size
 GAMMA = 0.99  # discount factor 0.99
 TAU = 1e-3  # for soft update of target parameters
-LR = 1e-3  # learning rate 4
+LR = 1e-5  # learning rate (Works with 1e-3)
 UPDATE_EVERY = 4  # how often to update the network
 # input_channels = 3  # Number of Input channels (only used for conv nets)
 
@@ -37,13 +37,18 @@ class Agent():
         self.seed = random.seed(seed)
         self.double_dqn = double_dqn
         self.dueling = dueling
-
+        self.type = 'DQN'
+        if self.dueling:
+            self.type = 'DDQN'
         if self.double_dqn:
             print("Loaded Double DQN Network Architecture!")
+            self.type = 'DoubleDQN'
+            if self.dueling:
+                self.type = 'DoubleDDQN'
         # Q-Network
         self.qnetwork_local = QNetwork_FC(state_size, action_size,dueling=self.dueling).to(device)
-        self.qnetwork_target = copy.deepcopy(self.qnetwork_local)
-
+        #self.qnetwork_target = copy.deepcopy(self.qnetwork_local)
+        self.qnetwork_target = QNetwork_FC(state_size, action_size, dueling=self.dueling).to(device)
         self.optimizer = optim.Adam(self.qnetwork_local.parameters(), lr=LR)
 
         # Replay memory
@@ -132,8 +137,12 @@ class Agent():
             target_model (PyTorch model): weights will be copied to
             tau (float): interpolation parameter
         """
-        for target_param, local_param in zip(target_model.parameters(), local_model.parameters()):
-            target_param.data.copy_(tau * local_param.data + (1.0 - tau) * target_param.data)
+        if TAU == 0.:
+            for target_param, local_param in zip(target_model.parameters(), local_model.parameters()):
+                target_param.data.copy_(tau * local_param.data)
+        else:
+            for target_param, local_param in zip(target_model.parameters(), local_model.parameters()):
+                target_param.data.copy_(tau * local_param.data + (1.0 - tau) * target_param.data)
 
     def save(self,Path):
         torch.save(self.qnetwork_local.state_dict(), Path)
