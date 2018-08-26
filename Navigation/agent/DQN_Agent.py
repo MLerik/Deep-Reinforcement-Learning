@@ -11,12 +11,12 @@ BUFFER_SIZE = int(1e5)  # replay buffer size
 BATCH_SIZE = 64  # minibatch size
 GAMMA = 0.99  # discount factor 0.99
 TAU = 1e-3  # for soft update of target parameters
-LR = 1.e-4  # learning rate 4
-UPDATE_EVERY = 2  # how often to update the network
+LR = 5e-4  # learning rate 4
+UPDATE_EVERY = 4  # how often to update the network
 double_dqn = True  # If using double dqn algorithm
-input_channels = 6  # Number of Input channels
+# input_channels = 3  # Number of Input channels (only used for conv nets)
 
-# device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+#device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 device = torch.device("cpu")
 print(device)
 
@@ -36,7 +36,7 @@ class Agent():
         self.state_size = state_size
         self.action_size = action_size
         self.seed = random.seed(seed)
-        self.version = 3
+
         # Q-Network
         self.qnetwork_local = QNetwork_FC(state_size, action_size).to(device)
         self.qnetwork_target = copy.deepcopy(self.qnetwork_local)
@@ -96,10 +96,9 @@ class Agent():
 
 
         if double_dqn:
-            # Double DQN
+        # Double DQN
             q_best_action = self.qnetwork_local(next_states).max(1)[1]
             Q_targets_next = self.qnetwork_target(next_states).gather(1, q_best_action.unsqueeze(-1))
-        #Q_targets_next = self.qnetwork_target(next_states).gather(1, q_best_action)
         else:
         # DQN
             Q_targets_next = self.qnetwork_target(next_states).detach().max(1)[0].unsqueeze(-1)
