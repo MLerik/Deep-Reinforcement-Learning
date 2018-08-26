@@ -13,7 +13,6 @@ GAMMA = 0.99  # discount factor 0.99
 TAU = 1e-3  # for soft update of target parameters
 LR = 5e-4  # learning rate 4
 UPDATE_EVERY = 4  # how often to update the network
-double_dqn = True  # If using double dqn algorithm
 # input_channels = 3  # Number of Input channels (only used for conv nets)
 
 #device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -24,7 +23,7 @@ print(device)
 class Agent():
     """Interacts with and learns from the environment."""
 
-    def __init__(self, state_size, action_size, seed):
+    def __init__(self, state_size, action_size, seed, double_dqn = True):
         """Initialize an Agent object.
 
         Params
@@ -36,7 +35,7 @@ class Agent():
         self.state_size = state_size
         self.action_size = action_size
         self.seed = random.seed(seed)
-
+        self.double_dqn = double_dqn
         # Q-Network
         self.qnetwork_local = QNetwork_FC(state_size, action_size).to(device)
         self.qnetwork_target = copy.deepcopy(self.qnetwork_local)
@@ -95,7 +94,7 @@ class Agent():
         Q_expected = self.qnetwork_local(states).gather(1, actions)
 
 
-        if double_dqn:
+        if self.double_dqn:
         # Double DQN
             q_best_action = self.qnetwork_local(next_states).max(1)[1]
             Q_targets_next = self.qnetwork_target(next_states).gather(1, q_best_action.unsqueeze(-1))
