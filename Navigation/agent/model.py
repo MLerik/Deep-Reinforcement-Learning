@@ -7,26 +7,38 @@ import torch.nn.functional as F
 
 
 class QNetwork_FC(nn.Module):
-    def __init__(self, state_size, action_size,  hidsize1 = 64, hidsize2 = 64):
+    def __init__(self, state_size, action_size,  hidsize1 = 64, hidsize2 = 64,dueling = True):
         super(QNetwork_FC, self).__init__()
-        self.fc1_val = nn.Linear(state_size, hidsize1)
-        self.fc2_val = nn.Linear(hidsize1, hidsize2)
-        self.fc3_val = nn.Linear(hidsize2, 1)
+        self.dueling = dueling
+        if self.dueling:
+            self.fc1_val = nn.Linear(state_size, hidsize1)
+            self.fc2_val = nn.Linear(hidsize1, hidsize2)
+            self.fc3_val = nn.Linear(hidsize2, 1)
 
-        self.fc1_adv = nn.Linear(state_size, hidsize1)
-        self.fc2_adv = nn.Linear(hidsize1, hidsize2)
-        self.fc3_adv = nn.Linear(hidsize2, action_size)
+            self.fc1_adv = nn.Linear(state_size, hidsize1)
+            self.fc2_adv = nn.Linear(hidsize1, hidsize2)
+            self.fc3_adv = nn.Linear(hidsize2, action_size)
+        else:
+            self.fc1 = nn.Linear(state_size, hidsize1)
+            self.fc2 = nn.Linear(hidsize1, hidsize2)
+            self.fc3 = nn.Linear(hidsize2, action_size)
 
     def forward(self, x):
         # Value net
-        val = F.relu(self.fc1_val(x))
-        val = F.relu(self.fc2_val(val))
-        val = self.fc3_val(val)
+        if self.dueling:
+            val = F.relu(self.fc1_val(x))
+            val = F.relu(self.fc2_val(val))
+            val = self.fc3_val(val)
 
-        # Advantage net
-        adv = F.relu(self.fc1_adv(x))
-        adv = F.relu(self.fc2_adv(adv))
-        adv = self.fc3_adv(adv)
+            # Advantage net
+            adv = F.relu(self.fc1_adv(x))
+            adv = F.relu(self.fc2_adv(adv))
+            adv = self.fc3_adv(adv)
 
+            x = adv + val - adv.mean()
+        else:
+            x = F.relu(self.fc1(x))
+            x = F.relu(self.fc2(x))
+            x = self.fc3(x)
 
-        return adv + val - adv.mean()
+        return x
