@@ -29,9 +29,13 @@ The task is episodic, and in order to solve the environment, your agent must get
 
 <a name="set"></a>
 ## Setting up the Agent
+
 ### DQN - Agent
+
 Given that the input state has both binary and real valued numbers and considering that discretizing this space would lead to a huge discrete state-space, I chose to implement the DQN agent using a [feed forward neural network](https://en.wikipedia.org/wiki/Feedforward_neural_network) for Q-Valuefunction approximation.
+
 #### Neural net as function approximator
+
 The general idea when using neural networks for Q-Learning is to approximate the Q-Value of each action-state-configuration. The state of the environment is fed as input to the neural network and the network returns a Q-Value estimation for all possible actions.
 
 Hence the input size to the neural network and the output size are given by the environment, in our case we have a 37 dimensional input and a 4 dimensional output.
@@ -41,7 +45,12 @@ The structure of the neural network inbetween input and output, the so called hi
 For the BananaBrain environment a neural network with 2 hidden layers with 64 hidden units each works well. The output of each layer (except the last layer) is passed through a non-linearity ([rectified linear unit in this case](https://en.wikipedia.org/wiki/Rectifier_(neural_networks))).
 
 To receive Q-Value estimations for a given state, a forward pass through the network is perfomed. In order to chose an action from these Q-Values we need a policy which the agent follows.
+
 #### Epsilon-greedy policy
+The so called epsilon-greedy policy is used to chose an action from the given Q-Value approximations. In this policy the agent will choose the action with the highest Q-Value with a probability of 1-epsilon and a random action with the probability of epsilon. This policy is good for training as it can be shown that it will converge to the optimal policy.
+
+#### Enhancements to basic DQN Network
+
 
 
 <a name="train"></a>
