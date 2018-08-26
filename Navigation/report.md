@@ -47,7 +47,7 @@ To perform this Q-Learning the agent needs to collect experiences, which means t
 - **Action**: An integere in the range [0,4] representing the action the agent took
 - **Reward**: Reward returned by the environment which depends on the state. It can take the values (-1,0,1)
 - **Next State**: A 37 dimensional array containing all the available information about the state of the environment after the action was executed
-- **Done** : True or False depending whether the episode has terminated or not
+- **Done** : True or False depending whether the episode has terminated or not. If Done is true there is no next state and the reward is not discounted!
 
 
 
