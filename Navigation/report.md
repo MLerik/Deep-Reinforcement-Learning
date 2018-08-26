@@ -1,6 +1,7 @@
 # Report for training an RL-Agent on BananaBrain
 ## Contents
 - [Overview Environment](#over)
+- [Q Learning](#qlearning)
 - [Setting up the Agent](#set)
 - [Training and Performance](#train)
 - [Future Improvements](#future)
@@ -25,6 +26,29 @@ Given this information, the agent has to learn how to best select actions.  Four
 - **`3`** - turn right.
 
 The task is episodic, and in order to solve the environment, your agent must get an average score of +13 over 100 consecutive episodes.
+
+
+<a name="qlearning"></a>
+## Q Learning
+Definition:
+
+Q-learning is a reinforcement learning technique used in machine learning. The goal of Q-Learning is to learn a policy, which tells an agent what action to take under what circumstances. It does not require a model of the environment and can handle problems with stochastic transitions and rewards, without requiring adaptations.
+
+For any finite Markov decision process (FMDP), Q-learning finds a policy that is optimal in the sense that it maximizes the expected value of the total reward over all successive steps, starting from the current state. Q-learning can identify an optimal action-selection policy for any given FMDP, given infinite exploration time and a partly-random policy. "Q" names the function that returns the reward used to provide the reinforcement and can be said to stand for the "quality" of an action taken in a given state
+
+The aim of this algorithm is to maximise the future discounted reward. This means that we want to maximize
+
+[image4]:https://github.com/androiddeverik/Deep-Reinforcement-Learning/blob/master/Navigation/q_learning.png
+![qupdate][image4]
+
+To perform Q-Learning the agent needs to collect experiences, which means that the agent needs to interact with the environment. The interaction with the environment causes the environment to change and the agent receives an update about the new state of the environment as well as a reward depending on that state. Such a tuple for learning contains the following data
+
+- **State**: A 37 dimensional array containing all the available information about the current state of the environment
+- **Action**: An integere in the range [0,4] representing the action the agent took
+- **Reward**: Reward returned by the environment which depends on the state. It can take the values (-1,0,1)
+- **Next State**: A 37 dimensional array containing all the available information about the state of the environment after the action was executed
+- **Done** : True or False depending whether the episode has terminated or not
+
 
 
 <a name="set"></a>
@@ -82,6 +106,7 @@ Output | 4 | 1
 
 <a name="train"></a>
 ## Training and Performance
+
 
 <a name="future"></a>
 ## Future Improvements
