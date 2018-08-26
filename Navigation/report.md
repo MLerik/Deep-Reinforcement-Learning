@@ -65,6 +65,7 @@ To reduce the problem of the moving target we can further enhance our network by
 
 This improvement is simple implemented by generating a copy of the neural network and using this copied network to predict the Q-values. Furthermore an update strategy for this copied network needs to be implemented. In my case I chose to update the weights as a convex combination of the current network weights and the network weights of the trained network. In this case we end up with a slowly evovling network which keeps our Q-Value targets more stable during training.
 
+#### Final network structure
 
 
 <a name="train"></a>
