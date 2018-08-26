@@ -36,12 +36,12 @@ Q-learning is a reinforcement learning technique used in machine learning. The g
 
 For any finite Markov decision process (FMDP), Q-learning finds a policy that is optimal in the sense that it maximizes the expected value of the total reward over all successive steps, starting from the current state. Q-learning can identify an optimal action-selection policy for any given FMDP, given infinite exploration time and a partly-random policy. "Q" names the function that returns the reward used to provide the reinforcement and can be said to stand for the "quality" of an action taken in a given state
 
-The aim of this algorithm is to maximise the future discounted reward. This means that we want to maximize
+The aim of this algorithm is to maximise the future discounted reward. This means that we want to maximize sum over all future rewards. To achieve this we can perform the following update to our Q function:
 
-[image4]:https://github.com/androiddeverik/Deep-Reinforcement-Learning/blob/master/Navigation/q_learning.png
+[image4]:https://github.com/androiddeverik/Deep-Reinforcement-Learning/blob/master/Navigation/q_learning.svg
 ![qupdate][image4]
 
-To perform Q-Learning the agent needs to collect experiences, which means that the agent needs to interact with the environment. The interaction with the environment causes the environment to change and the agent receives an update about the new state of the environment as well as a reward depending on that state. Such a tuple for learning contains the following data
+To perform this Q-Learning the agent needs to collect experiences, which means that the agent needs to interact with the environment. The interaction with the environment causes the environment to change and the agent receives an update about the new state of the environment as well as a reward depending on that state. Such a tuple for learning contains the following data
 
 - **State**: A 37 dimensional array containing all the available information about the current state of the environment
 - **Action**: An integere in the range [0,4] representing the action the agent took
