@@ -11,7 +11,7 @@ BUFFER_SIZE = int(1e5)  # replay buffer size
 BATCH_SIZE = 64  # minibatch size
 GAMMA = 0.99  # discount factor 0.99
 TAU = 1e-3  # for soft update of target parameters
-LR = 5e-4  # learning rate 4
+LR = 1e-3  # learning rate 4
 UPDATE_EVERY = 4  # how often to update the network
 # input_channels = 3  # Number of Input channels (only used for conv nets)
 
@@ -23,7 +23,7 @@ print(device)
 class Agent():
     """Interacts with and learns from the environment."""
 
-    def __init__(self, state_size, action_size, seed, double_dqn = True,dueling = True):
+    def __init__(self, state_size, action_size, seed, double_dqn = True, dueling = True):
         """Initialize an Agent object.
 
         Params
@@ -37,8 +37,11 @@ class Agent():
         self.seed = random.seed(seed)
         self.double_dqn = double_dqn
         self.dueling = dueling
+
+        if self.double_dqn:
+            print("Loaded Double DQN Network Architecture!")
         # Q-Network
-        self.qnetwork_local = QNetwork_FC(state_size, action_size,dueling =self.dueling).to(device)
+        self.qnetwork_local = QNetwork_FC(state_size, action_size,dueling=self.dueling).to(device)
         self.qnetwork_target = copy.deepcopy(self.qnetwork_local)
 
         self.optimizer = optim.Adam(self.qnetwork_local.parameters(), lr=LR)

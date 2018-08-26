@@ -7,10 +7,11 @@ import torch.nn.functional as F
 
 
 class QNetwork_FC(nn.Module):
-    def __init__(self, state_size, action_size,  hidsize1 = 64, hidsize2 = 64,dueling = True):
+    def __init__(self, state_size, action_size,  hidsize1 = 37, hidsize2 = 64,dueling = True):
         super(QNetwork_FC, self).__init__()
         self.dueling = dueling
         if self.dueling:
+            print("Loaded Dueling Network Architecture!")
             self.fc1_val = nn.Linear(state_size, hidsize1)
             self.fc2_val = nn.Linear(hidsize1, hidsize2)
             self.fc3_val = nn.Linear(hidsize2, 1)
