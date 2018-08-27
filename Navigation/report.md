@@ -118,9 +118,11 @@ Training was performed using the Jupyter Notebook file and all different impleme
 - Epsilon decay = 0.99
 
 ### Performance
-All the different implementations were compared. The best result (fastest meeting required 13+ point average) was achieved with the dueling DQN which reached the target after 239 Episodes
-[image5]:https://github.com/androiddeverik/Deep-Reinforcement-Learning/blob/master/Navigation/Training_Final.png
-![TrainingPerf][image5]
+All the different implementations were compared. The best result (fastest meeting required 13+ point average) was achieved with the dueling DQN which reached the target after **239 Episodes**. 
+
+
+[image6]:https://github.com/androiddeverik/Deep-Reinforcement-Learning/blob/master/Navigation/Training_Final.png
+![Training][image6]
 
 
 <a name="future"></a>
