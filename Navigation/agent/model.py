@@ -7,7 +7,7 @@ import torch.nn.functional as F
 
 
 class QNetwork_FC(nn.Module):
-    def __init__(self, state_size, action_size,  hidsize1 = 64, hidsize2 = 64, dueling = True):
+    def __init__(self, state_size, action_size,  hidsize1 = 64, hidsize2 = 32, dueling = True):
         super(QNetwork_FC, self).__init__()
         self.dueling = dueling
         if self.dueling:
