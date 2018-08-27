@@ -23,7 +23,7 @@ print(device)
 class Agent():
     """Interacts with and learns from the environment."""
 
-    def __init__(self, state_size, action_size, seed, double_dqn = True, dueling = True):
+    def __init__(self, state_size, action_size,learning_rate, seed, double_dqn = True, dueling = True):
         """Initialize an Agent object.
 
         Params
@@ -34,6 +34,7 @@ class Agent():
         """
         self.state_size = state_size
         self.action_size = action_size
+        self.learning_rate = learning_rate
         self.seed = random.seed(seed)
         self.double_dqn = double_dqn
         self.dueling = dueling
@@ -49,7 +50,7 @@ class Agent():
         self.qnetwork_local = QNetwork_FC(state_size, action_size,dueling=self.dueling).to(device)
         #self.qnetwork_target = copy.deepcopy(self.qnetwork_local)
         self.qnetwork_target = QNetwork_FC(state_size, action_size, dueling=self.dueling).to(device)
-        self.optimizer = optim.Adam(self.qnetwork_local.parameters(), lr=LR)
+        self.optimizer = optim.Adam(self.qnetwork_local.parameters(), lr=self.learning_rate)
 
         # Replay memory
         self.memory = ReplayBuffer(action_size, BUFFER_SIZE, BATCH_SIZE, seed)
@@ -105,8 +106,9 @@ class Agent():
 
         if self.double_dqn:
         # Double DQN
-            q_best_action = self.qnetwork_local(next_states).max(1)[1]
-            Q_targets_next = self.qnetwork_target(next_states).gather(1, q_best_action.unsqueeze(-1))
+            with torch.set_grad_enabled(False):
+                q_best_action = self.qnetwork_local(next_states).max(1)[1]
+                Q_targets_next = self.qnetwork_target(next_states).gather(1, q_best_action.unsqueeze(-1))
         else:
         # DQN
             Q_targets_next = self.qnetwork_target(next_states).detach().max(1)[0].unsqueeze(-1)
@@ -137,7 +139,7 @@ class Agent():
             target_model (PyTorch model): weights will be copied to
             tau (float): interpolation parameter
         """
-        if TAU == 0.:
+        if tau == 0.:
             for target_param, local_param in zip(target_model.parameters(), local_model.parameters()):
                 target_param.data.copy_(tau * local_param.data)
         else:
