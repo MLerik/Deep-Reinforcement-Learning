@@ -106,7 +106,7 @@ Output | 4 | 1
 
 <a name="train"></a>
 ## Training and Performance
-Training was performed using the Jupyter Notebook file and all different implementations were compared to each other. For all implementations I used the same hyperparameters in order to be able to compare the state. For better comparison one would need to reset all the random number seeds of the agent and the environment to the same seed. 
+Training was performed using the [Jupyter Notebook file](https://github.com/androiddeverik/Deep-Reinforcement-Learning/blob/master/Navigation/Navigation.ipynb) and all different implementations were compared to each other. For all implementations I used the same hyperparameters in order to be able to compare the state. For better comparison one would need to reset all the random number seeds of the agent and the environment to the same seed. 
 
 ### Hyperparameters
 - Learning Rate = 1e-5
