@@ -98,8 +98,8 @@ The image above illustrates the final network structure used for training and th
 Layer | Action Value Net | State Value net
 ------------ | ------------ | -------------
 Input | 37 | 37
-Hidden 1 | 37 | 37
-Hidden 2 | 64 | 64
+Hidden 1 | 64 | 64
+Hidden 2 | 32 | 32
 Output | 4 | 1
 
 
