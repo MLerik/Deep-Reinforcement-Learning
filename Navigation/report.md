@@ -106,6 +106,21 @@ Output | 4 | 1
 
 <a name="train"></a>
 ## Training and Performance
+Training was performed using the Jupyter Notebook file and all different implementations were compared to each other. For all implementations I used the same hyperparameters in order to be able to compare the state. For better comparison one would need to reset all the random number seeds of the agent and the environment to the same seed. 
+
+### Hyperparameters
+- Learning Rate = 1e-5
+- Batch Size = 64
+- Discount factor gamma = 0.99
+- Soft update factor Tau = 1.e-3
+- Initial epsilon = 0.1
+- Minimal epsioln = 0.001
+- Epsilon decay = 0.99
+
+### Performance
+All the different implementations were compared. The best result (fastest meeting required 13+ point average) was achieved with the dueling DQN which reached the target after 239 Episodes
+[image5]:https://github.com/androiddeverik/Deep-Reinforcement-Learning/blob/master/Navigation/Training_Final.png
+![TrainingPerf][image5]
 
 
 <a name="future"></a>
