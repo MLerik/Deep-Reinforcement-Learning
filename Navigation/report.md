@@ -118,7 +118,7 @@ Training was performed using the [Jupyter Notebook file](https://github.com/andr
 - Epsilon decay = 0.99
 
 ### Performance
-All the different implementations were compared. The best result (fastest meeting required 13+ point average) was achieved with the dueling DQN which reached the target after **239 Episodes**. 
+All the different implementations were compared. The best result (fastest reaching required 13+ point average) was achieved with the dueling DQN which reached the target after **239 Episodes**. In general we can observe that double DQN brings less improvement than the dueling architecture.
 
 
 [image6]:https://github.com/androiddeverik/Deep-Reinforcement-Learning/blob/master/Navigation/Training_Final.png
@@ -127,3 +127,16 @@ All the different implementations were compared. The best result (fastest meetin
 
 <a name="future"></a>
 ## Future Improvements
+To further imrpove the already good results there are many different ideas and I would like to highlight two of them here.
+### Hierarchical RL
+In hierarchical RL we can divide the full task into smaller subtasks. In this case here we could consider the task to consist of two sub-objectives.
+#### Searching
+First we have to find the next yellow banana that we want to collect. This task can be optimized to find the best reachable banana from the current position. A scanning behavior would probably be helpful here.
+#### Navigation
+Once we have found a suitable banana, we need to take the shortest path to the banana without collecting any blue bananas.
+
+In hierarchical RL we could train two networks to perfom the above task very well by themselfes. In a next step we then train an agent to decide when to do searching and when to do navigating. For some complex tasks it has been shown to improve performance if the task is divided into subtasks.
+
+
+### RAINBOW
+A much simpler improvement to the current model would be to implement even more enhancement to the DQN algorithm. One example would be to implement the full [RAINBOW](https://arxiv.org/pdf/1710.02298.pdf) algorithm
