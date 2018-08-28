@@ -33,7 +33,7 @@ The task is episodic, and in order to solve the environment, your agent must get
 
     (_For AWS_) If you'd like to train the agent on AWS (and have not [enabled a virtual screen](https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Training-on-Amazon-Web-Service.md)), then please use [this link](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P1/Banana/Banana_Linux_NoVis.zip) to obtain the environment.
 
-2. Place the file in te in the `Navigation/` folder, and unzip (or decompress) the file. 
+2. Place the *.exe file in te in the `Navigation/env/` folder, and unzip (or decompress) the file. 
 3. Furthermore you will need to install torch, numpy, matplotlib
 ### Instructions
 
