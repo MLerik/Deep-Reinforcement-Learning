@@ -118,7 +118,7 @@ Training was performed using the [Jupyter Notebook file](https://github.com/andr
 - Epsilon decay = 0.99
 
 ### Performance
-All the different implementations were compared. The best result (fastest reaching required 13+ point average) was achieved with the dueling DQN which reached the target after **239 Episodes**. In general we can observe that double DQN brings less improvement than the dueling architecture.
+All the different implementations were compared. The best result (fastest reaching required 13+ point average) was achieved with the dueling DQN which reached the target after **239 Episodes**. In general we can observe that double DQN brings less improvement than the dueling architecture. The trained Networks can be found in the [/Nets folder](https://github.com/androiddeverik/Deep-Reinforcement-Learning/tree/master/Navigation/Nets).
 
 
 [image6]:https://github.com/androiddeverik/Deep-Reinforcement-Learning/blob/master/Navigation/Training_Final.png
