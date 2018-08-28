@@ -25,8 +25,9 @@ class QNetwork_FC(nn.Module):
             self.fc3 = nn.Linear(hidsize2, action_size)
 
     def forward(self, x):
-        # Value net
+
         if self.dueling:
+            # Value net
             val = F.relu(self.fc1_val(x))
             val = F.relu(self.fc2_val(val))
             val = self.fc3_val(val)
@@ -38,6 +39,7 @@ class QNetwork_FC(nn.Module):
 
             x = adv + val - adv.mean()
         else:
+            # Fully connected vanilla DQN net
             x = F.relu(self.fc1(x))
             x = F.relu(self.fc2(x))
             x = self.fc3(x)

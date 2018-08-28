@@ -47,6 +47,7 @@ class Agent():
             if self.dueling:
                 self.type = 'DoubleDDQN'
         # Q-Network
+        # Load the Q-Network and the slowly updateing target Q-Network
         self.qnetwork_local = QNetwork_FC(state_size, action_size,dueling=self.dueling).to(device)
         #self.qnetwork_target = copy.deepcopy(self.qnetwork_local)
         self.qnetwork_target = QNetwork_FC(state_size, action_size, dueling=self.dueling).to(device)
@@ -103,11 +104,13 @@ class Agent():
         # Get expected Q values from local model
         Q_expected = self.qnetwork_local(states).gather(1, actions)
 
-
+        # Implement dthe double DQN improvement
         if self.double_dqn:
         # Double DQN
             with torch.set_grad_enabled(False):
+                # Get the best action from the local Q-Network
                 q_best_action = self.qnetwork_local(next_states).max(1)[1]
+                # Get the Q-Values of the best actions chose by the local network
                 Q_targets_next = self.qnetwork_target(next_states).gather(1, q_best_action.unsqueeze(-1))
         else:
         # DQN
