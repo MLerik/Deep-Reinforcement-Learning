@@ -129,7 +129,7 @@ All the different implementations were compared. The best result (fastest reachi
 ## Future Improvements
 To further imrpove the already good results there are many different ideas and I would like to highlight two of them here.
 ### Hierarchical RL
-In hierarchical RL we can divide the full task into smaller subtasks. In this case here we could consider the task to consist of two sub-objectives.
+In [hierarchical RL](https://arxiv.org/abs/1604.06057) we can divide the full task into smaller subtasks. In this case here we could consider the task to consist of two sub-objectives.
 #### Searching
 First we have to find the next yellow banana that we want to collect. This task can be optimized to find the best reachable banana from the current position. A scanning behavior would probably be helpful here.
 #### Navigation
