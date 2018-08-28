@@ -32,9 +32,9 @@ The task is episodic, and in order to solve the environment, your agent must get
 ## Q Learning
 Definition by Wikipedia:
 
-[Q-learning](https://en.wikipedia.org/wiki/Q-learning) is a reinforcement learning technique used in machine learning. The goal of Q-Learning is to learn a policy, which tells an agent what action to take under what circumstances. It does not require a model of the environment and can handle problems with stochastic transitions and rewards, without requiring adaptations.
+*[Q-learning](https://en.wikipedia.org/wiki/Q-learning) is a reinforcement learning technique used in machine learning. The goal of Q-Learning is to learn a policy, which tells an agent what action to take under what circumstances. It does not require a model of the environment and can handle problems with stochastic transitions and rewards, without requiring adaptations.*
 
-For any finite Markov decision process (FMDP), Q-learning finds a policy that is optimal in the sense that it maximizes the expected value of the total reward over all successive steps, starting from the current state. Q-learning can identify an optimal action-selection policy for any given FMDP, given infinite exploration time and a partly-random policy. "Q" names the function that returns the reward used to provide the reinforcement and can be said to stand for the "quality" of an action taken in a given state
+*For any finite Markov decision process (FMDP), Q-learning finds a policy that is optimal in the sense that it maximizes the expected value of the total reward over all successive steps, starting from the current state. Q-learning can identify an optimal action-selection policy for any given FMDP, given infinite exploration time and a partly-random policy. "Q" names the function that returns the reward used to provide the reinforcement and can be said to stand for the "quality" of an action taken in a given state*
 
 The aim of this algorithm is to maximise the future discounted reward. This means that we want to maximize sum over all future rewards. To achieve this we can perform the following update to our Q function:
 
@@ -118,7 +118,9 @@ Training was performed using the [Jupyter Notebook file](https://github.com/andr
 - Epsilon decay = 0.99
 
 ### Performance
-All the different implementations were compared. The best result (fastest reaching required 13+ point average) was achieved with the dueling DQN which reached the target after **239 Episodes**. In general we can observe that double DQN brings less improvement than the dueling architecture. The trained Networks can be found in the [/Nets folder](https://github.com/androiddeverik/Deep-Reinforcement-Learning/tree/master/Navigation/Nets).
+All the different implementations were compared. The best result (fastest reaching required 13+ point average) was achieved with the dueling DQN which reached the target after **239 Episodes**. In general we can observe that double DQN brings less improvement than the dueling architecture. What we observe is that the performance of the different approaches vary strongly on a trial by trial basis. This is to be expected as the algorithm with a stochastic gradient. Even though all algorithms will converge to the optimal policy, the stochastic gradients do not guarantee that the fastest path to the optimal strategy will be followed. Hence to habe good comparison between the different implementations one needs to guarantee that the same environmental steps are shown to all agents. This of course is not possible in our setting and thus a comparison needs to be done over many trials. This was not done in this project due to large computational time needed.
+
+The trained Networks can be found in the [/Nets folder](https://github.com/androiddeverik/Deep-Reinforcement-Learning/tree/master/Navigation/Nets).
 
 
 [image6]:https://github.com/androiddeverik/Deep-Reinforcement-Learning/blob/master/Navigation/figs/Training_Final.png
