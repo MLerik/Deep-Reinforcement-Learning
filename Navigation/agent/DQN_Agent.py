@@ -48,7 +48,7 @@ class Agent():
                 self.type = 'DoubleDDQN'
         # Q-Network
         # Load the Q-Network and the slowly updateing target Q-Network
-        self.qnetwork_local = QNetwork_FC(state_size, action_size,dueling=self.dueling).to(device)
+        self.qnetwork_local = QNetwork_FC(state_size, action_size, dueling=self.dueling).to(device)
         #self.qnetwork_target = copy.deepcopy(self.qnetwork_local)
         self.qnetwork_target = QNetwork_FC(state_size, action_size, dueling=self.dueling).to(device)
         self.optimizer = optim.Adam(self.qnetwork_local.parameters(), lr=self.learning_rate)
