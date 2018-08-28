@@ -30,7 +30,7 @@ The task is episodic, and in order to solve the environment, your agent must get
 
 <a name="qlearning"></a>
 ## Q Learning
-Definition:
+Definition by Wikipedia:
 
 [Q-learning](https://en.wikipedia.org/wiki/Q-learning) is a reinforcement learning technique used in machine learning. The goal of Q-Learning is to learn a policy, which tells an agent what action to take under what circumstances. It does not require a model of the environment and can handle problems with stochastic transitions and rewards, without requiring adaptations.
 
@@ -56,7 +56,7 @@ To perform this Q-Learning the agent needs to collect experiences, which means t
 
 ### DQN - Agent
 
-Given that the input state has both binary and real valued numbers and considering that discretizing this space would lead to a huge discrete state-space, I chose to implement the DQN agent using a [feed forward neural network](https://en.wikipedia.org/wiki/Feedforward_neural_network) for Q-Valuefunction approximation.
+Given that the input state has both binary and real valued numbers and considering that discretizing this space would lead to a huge discrete state-space, I chose to implement the DQN agent using a [feed forward neural network](https://en.wikipedia.org/wiki/Feedforward_neural_network) for Q-Valuefunction approximation. Many functions such as memory, experience replay, step and so on were taken from the exercise code from the Udacity Nano Degree program.
 
 #### Neural net as function approximator
 
