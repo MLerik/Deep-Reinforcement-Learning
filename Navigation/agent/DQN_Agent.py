@@ -137,12 +137,8 @@ class Agent():
             target_model (PyTorch model): weights will be copied to
             tau (float): interpolation parameter
         """
-        if tau == 0.:
-            for target_param, local_param in zip(target_model.parameters(), local_model.parameters()):
-                target_param.data.copy_(tau * local_param.data)
-        else:
-            for target_param, local_param in zip(target_model.parameters(), local_model.parameters()):
-                target_param.data.copy_(tau * local_param.data + (1.0 - tau) * target_param.data)
+        for target_param, local_param in zip(target_model.parameters(), local_model.parameters()):
+            target_param.data.copy_(tau * local_param.data + (1.0 - tau) * target_param.data)
 
     def save(self,Path):
         torch.save(self.qnetwork_local.state_dict(), Path)
