@@ -132,7 +132,10 @@ class Agent_H():
         for target_param, local_param in zip(target_model.parameters(), local_model.parameters()):
             target_param.data.copy_(tau * local_param.data + (1.0 - tau) * target_param.data)
 
-
+    def load(self, Actor_File,Critic_File):
+        self.actor_local.load_state_dict(torch.load(Actor_File))
+        self.critic_local.load_state_dict(torch.load(Critic_File))
+        return
 class OUNoise:
     """Ornstein-Uhlenbeck process."""
 
