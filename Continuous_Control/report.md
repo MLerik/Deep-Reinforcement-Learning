@@ -8,45 +8,30 @@
 
 <a name="over"></a>
 ## Overview Environment
-[image1]: https://user-images.githubusercontent.com/10624937/42135619-d90f2f28-7d12-11e8-8823-82b970a54d7e.gif "Trained Agent"
-
-In this project I trained an agent to navigate (and collect bananas!) in a large, square world. As part of the Deep Reinforcement Learning Nano Degree @ Udacity.
+In this project I trained an multiple agents to solve the reacher task as part of the Deep Reinforcement Learning Nano Degree @ Udacity.
 Below you see a short sample gif of the environment as well as som details on how to get the Environment ready on your computer.
 
 ![Trained Agent][image1]
 
-A reward of +1 is provided for collecting a yellow banana, and a reward of -1 is provided for collecting a blue banana.  Thus, the goal of your agent is to collect as many yellow bananas as possible while avoiding blue bananas.  
+In this environment, a double-jointed arm can move to target locations. A reward of +0.1 is provided for each step that the agent's hand is in the goal location. Thus, the goal of your agent is to maintain its position at the target location for as many time steps as possible.
 
-The state space has 37 dimensions and contains the agent's velocity, along with ray-based perception of objects around agent's forward direction. Thus the state is made up of binary dimensions and real valued dimension!
+The observation space consists of 33 variables corresponding to position, rotation, velocity, and angular velocities of the arm. Each action is a vector with four numbers, corresponding to torque applicable to two joints. Every entry in the action vector should be a number between -1 and 1.
 
-Given this information, the agent has to learn how to best select actions.  Four discrete actions are available, corresponding to:
-- **`0`** - move forward.
-- **`1`** - move backward.
-- **`2`** - turn left.
-- **`3`** - turn right.
-
-The task is episodic, and in order to solve the environment, your agent must get an average score of +13 over 100 consecutive episodes.
+The barrier for solving the environment the agents must get an average score of +30 (over 100 consecutive episodes, and over all agents). Specifically,
+- After each episode, we add up the rewards that each agent received (without discounting), to get a score for each agent. This yields 20 (potentially different) scores. We then take the average of these 20 scores.
+- This yields an average score for each episode (where the average is over all 20 agents).
 
 
 <a name="qlearning"></a>
-## Q Learning
-Definition by Wikipedia:
-
-*[Q-learning](https://en.wikipedia.org/wiki/Q-learning) is a reinforcement learning technique used in machine learning. The goal of Q-Learning is to learn a policy, which tells an agent what action to take under what circumstances. It does not require a model of the environment and can handle problems with stochastic transitions and rewards, without requiring adaptations.*
-
-*For any finite Markov decision process (FMDP), Q-learning finds a policy that is optimal in the sense that it maximizes the expected value of the total reward over all successive steps, starting from the current state. Q-learning can identify an optimal action-selection policy for any given FMDP, given infinite exploration time and a partly-random policy. "Q" names the function that returns the reward used to provide the reinforcement and can be said to stand for the "quality" of an action taken in a given state*
-
-The aim of this algorithm is to maximise the future discounted reward. This means that we want to maximize sum over all future rewards. To achieve this we can perform the following update to our Q function:
-
-[image4]:https://github.com/androiddeverik/Deep-Reinforcement-Learning/blob/master/Navigation/figs/q_learning.svg
-![qupdate][image4]
-
-To perform this Q-Learning the agent needs to collect experiences, which means that the agent needs to interact with the environment. The interaction with the environment causes the environment to change and the agent receives an update about the new state of the environment as well as a reward depending on that state. Such a tuple for learning contains the following data
-
-- **State**: A 37 dimensional array containing all the available information about the current state of the environment
-- **Action**: An integere in the range [0,4] representing the action the agent took
-- **Reward**: Reward returned by the environment which depends on the state. It can take the values (-1,0,1)
-- **Next State**: A 37 dimensional array containing all the available information about the state of the environment after the action was executed
+## Actor-Critic Model
+### Deep Deterministic Policy Gradients (DDPG)
+[actor-critic]:https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Continuous_Control/Images/A-regular-actor-critic-model-TD-temporal-difference.png
+![architecture][actor-critic]
+Actor-Critic-Models fall in the calss between policy-based and value-based model. Models of this class take advantege from both different approaches.
+- **State**: A 33 Dimensional array representing position, velocity, acceleration and further information about the target position
+- **Action**: 4 Floats in the range [-1,1] representing the torque at each joint of the robot arm
+- **Reward**: Reward returned by the environment which depends on the state. It can take the values (0,0.1)
+- **Next State**: A 33 dimensional array containing all the available information about the state of the environment after the action was executed
 - **Done** : True or False depending whether the episode has terminated or not. If Done is true there is no next state and the reward is not discounted!
 
 
@@ -54,7 +39,7 @@ To perform this Q-Learning the agent needs to collect experiences, which means t
 <a name="set"></a>
 ## Setting up the Agent
 
-### DQN - Agent
+### DDPG - Agent
 
 Given that the input state has both binary and real valued numbers and considering that discretizing this space would lead to a huge discrete state-space, I chose to implement the DQN agent using a [feed forward neural network](https://en.wikipedia.org/wiki/Feedforward_neural_network) for Q-Valuefunction approximation. Many functions such as memory, experience replay, step and so on were taken from the exercise code from the Udacity Nano Degree program.
 
