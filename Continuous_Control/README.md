@@ -27,4 +27,4 @@ The barrier for solving the environment the agents must get an average score of 
 ### Instructions
 
 Follow the instructions in [`Continuous_Control.ipynb`](https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Continuous_Control/Continuous_Control.ipynb) to see how the agent performs during and after training.
-Read the [report](hhttps://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Continuous_Control/report.md) to see details about the chosen model, hyperparameters and additional considerations
+Read the ['Report'](hhttps://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Continuous_Control/report.md) to see details about the chosen model, hyperparameters and additional considerations
