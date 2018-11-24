@@ -20,7 +20,6 @@ LEARN_DELAY = 20  # Collect memories for n steps
 LEARN_STEPS = 10  # Do n number of weight updates
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-
 class Agent():
     """Interacts with and learns from the environment."""
 
@@ -37,7 +36,6 @@ class Agent():
         self.action_size = action_size
         self.nbr_agents = nbr_agents
         self.seed = random.seed(random_seed)
-
         # Actor Network (w/ Target Network)
         #self.actor_local = Actor(state_size, action_size, random_seed).to(device)
         #self.actor_target = Actor(state_size, action_size, random_seed).to(device)
@@ -73,11 +71,13 @@ class Agent():
             self.memory.add(state[i], action[i], reward[i], next_state[i], done[i])
 
         # Learn, if enough samples are available in memory
-        if t % LEARN_DELAY == 0:
-            if len(self.memory) > BATCH_SIZE:
-                for i in range(LEARN_STEPS):
-                    experiences = self.memory.sample()
-                    self.learn(self.actor_local[i], self.critic_local[i], self.actor_target[i], self.critic_target[i], self.critic_optimizer[i], self.actor_optimizer[i],experiences, GAMMA)
+        i = t % self.nbr_agents
+        if len(self.memory) > BATCH_SIZE:
+            for j in range(LEARN_STEPS):
+                experiences = self.memory.sample()
+                self.learn(self.actor_local[i], self.critic_local[i], self.actor_target[i],
+                           self.critic_target[i], self.critic_optimizer[i], self.actor_optimizer[i],
+                           experiences, GAMMA)
 
     def act(self, state, add_noise=True):
         """Returns actions for given state as per current policy."""
