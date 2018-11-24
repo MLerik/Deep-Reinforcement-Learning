@@ -6,6 +6,7 @@
 - [Training and Performance](#train)
 - [Future Improvements](#future)
 
+[image1]: https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Continuous_Control/Images/reacher.gif "Environment"
 <a name="over"></a>
 ## Overview Environment
 In this project I trained an multiple agents to solve the reacher task as part of the Deep Reinforcement Learning Nano Degree @ Udacity.
@@ -27,6 +28,7 @@ The barrier for solving the environment the agents must get an average score of 
 ### Deep Deterministic Policy Gradients (DDPG)
 [actor-critic]:https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Continuous_Control/Images/A-regular-actor-critic-model-TD-temporal-difference.png
 ![architecture][actor-critic]
+
 Actor-Critic-Models fall in the calss between policy-based and value-based model. Models of this class take advantege from both different approaches.
 - **State**: A 33 Dimensional array representing position, velocity, acceleration and further information about the target position
 - **Action**: 4 Floats in the range [-1,1] representing the torque at each joint of the robot arm
@@ -55,24 +57,6 @@ For the BananaBrain environment a neural network with 2 hidden layers with 64 hi
 
 To receive Q-Value estimations for a given state, a forward pass through the network is perfomed. In order to chose an action from these Q-Values we need a policy which the agent follows.
 
-#### Epsilon-greedy policy
-The so called epsilon-greedy policy is used to chose an action from the given Q-Value approximations. In this policy the agent will choose the action with the highest Q-Value with a probability of P(a(maxQ) = 1-epsilon and a random action with the probability of epsilon. This policy is good for training as it can be shown that it will converge to the optimal policy.
-
-#### Enhancements to basic DQN Network: Dueling DQN
-[image2]:https://github.com/androiddeverik/Deep-Reinforcement-Learning/blob/master/Navigation/figs/dueling.png
-
-In order to improve the performance of the DQN Network a minor addition can be done. By splitting the Q-Function into its to parts, namely state value estimation and action value estimation we can improve the behavior of the agent.
-![Dueling][image2]
-
-This is specially helpful when we have many states where no action leads to a better state. In these cases the split of the estimations helps, because the value of each state can be considered independently of the possible actions.
-
-This improvement can easily be implemented by splitting the neural network into two seperate streams. Both streams take the state as an input and are merged before the output. For merging we sum the action values with the state value and subtract the mean of the action values.
-
-
-#### Enhancements to basic DQN Network: Double DQN
-To reduce the problem of the moving target we can further enhance our network by seperating the prediction of the Q-Values and the Q-Value target generation. In other words we introduce a copy of the DQN network which has a slower weight update than our main network. We use this network to predict the Q-Values for the chosen actions instead of predicting the Q-Values with the same network which chooses the action.
-
-This improvement is simple implemented by generating a copy of the neural network and using this copied network to predict the Q-values. Furthermore an update strategy for this copied network needs to be implemented. In my case I chose to update the weights as a convex combination of the current network weights and the network weights of the trained network. In this case we end up with a slowly evovling network which keeps our Q-Value targets more stable during training.
 
 #### Final network structure
 [image3]:https://github.com/androiddeverik/Deep-Reinforcement-Learning/blob/master/Navigation/figs/neural_net.png
