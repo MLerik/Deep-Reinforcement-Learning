@@ -90,7 +90,7 @@ The environment was solved after **177 Episodes** but this was not the convergin
 The trained Networks can be found in the [/Nets folder](https://github.com/androiddeverik/Deep-Reinforcement-Learning/tree/master/Navigation/Nets).
 
 
-[image6]:https://github.com/androiddeverik/Deep-Reinforcement-Learning/blob/master/Navigation/figs/Training_Final.png
+[image6]:https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Continuous_Control/Images/Training.png
 ![Training][image6]
 
 
