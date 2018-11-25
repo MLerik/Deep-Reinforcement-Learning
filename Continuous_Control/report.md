@@ -54,8 +54,14 @@ This approach was very successfull and the task was solved after **177 episodes*
 In this approach I assume all the 20 agents to be individuals. [Here](https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Continuous_Control/Agent/ddpg_agent.py) I implemented a seperate neural network for each agent to represent each agents policy and only shared the replay buffer between all agents. With this approach we collect experiences from many different policies at the same time. Unfortunately I don't know how well this would behave because training was very slow and I had to abort before the task was solved. I hope to let a training run for longer times to see how it hold up.
 
 #### Final network structure
+I used two identical network setups for the actor and critic, except for the output layer. The actor outputs 4 values in [-1,1] whereas the critic only outputse a single value representing the state-action-value.
 
-
+Layer | Actor | Critic
+------------ | ------------ | -------------
+Input | 33 | 33
+Hidden 1 | 400 | 400
+Hidden 2 | 300 | 300
+Output | 4 | 1
 
 <a name="train"></a>
 ## Training and Performance
