@@ -88,7 +88,7 @@ Training was performed using the [Jupyter Notebook file](https://github.com/MLer
 
 The environment was solved after **177 Episodes** but this was not the converging point of training. Letting the agents train for even longer periods of times showed significant improvement up to more than **35 point average** of reward.
 The trained Networks can be found in the [/Nets folder](https://github.com/androiddeverik/Deep-Reinforcement-Learning/tree/master/Navigation/Nets).
-
+The figure below shows the average score over the last 100 epsiodes. 
 
 [image6]:https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Continuous_Control/Images/Training.png
 ![Training][image6]
