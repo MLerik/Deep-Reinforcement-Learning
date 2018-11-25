@@ -46,6 +46,8 @@ Actor-Critic-Models fall in the class between policy-based and value-based model
 Because we have a continuous action and state space it makes sence to use a policy based method. Starting from the [example](https://github.com/udacity/deep-reinforcement-learning/tree/master/ddpg-pendulum) from the Udacity Deep Reinforcement Learning Nano Degree, we only need to make minor adjustments to get a good performing agent.
 
 First adjustments are of course the state space and action space size, and the less straight forward adjustment is the modification to support 20 agents. I implemented two different approaches for training.
+
+Information on how to implement a DDPG-Agent can be found [here](https://arxiv.org/abs/1509.02971)
 #### Homogeneous Agents
 In this approach I assume all the 20 agents to be copies of each other. In other words we only need to [implement one DDPG-Agent](https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Continuous_Control/Agent/ddpg_agent.py) and just let it give actions to each individual state. If you combine this with one shared replay buffer, what you get is a rudimentary parallelization of training. These 20 agents explore 20 trajectories in parallel using the same policy.
 This approach was very successfull and the task was solved after **177 episodes**. It however has the drawback that the replay buffer only contains trajectories of one policy and thus exploration is not optimal.
