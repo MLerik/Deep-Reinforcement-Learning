@@ -62,8 +62,7 @@ In this approach I assume all the 20 agents to be individuals. [Here](https://gi
 Training was performed using the [Jupyter Notebook file](https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Continuous_Control/Continuous_Control.ipynb) and can run locally on a decent laptop in less than 2 hours. Convergance and stability of this approach were very good.
 
 ### Hyperparameters
-
-"
+~~~~
 - BUFFER_SIZE = int(1e6)  # replay buffer size
 - BATCH_SIZE = 1024  # minibatch size
 - GAMMA = 0.99  # discount factor
@@ -73,11 +72,13 @@ Training was performed using the [Jupyter Notebook file](https://github.com/MLer
 - WEIGHT_DECAY = 0  # L2 weight decay
 - LEARN_DELAY = 20  # Collect memories for n steps
 - LEARN_STEPS = 10  # Do n number of weight updates
-"
+- OU-Noise MU = 0. # Each agent has an OU-Noise-Process for each of its possible actions (4)
+- Ou-Noise Sigma = 0.1 
+~~~~
 
 ### Performance
-All the different implementations were compared. The best result (fastest reaching required 13+ point average) was achieved with the dueling DQN which reached the target after **239 Episodes**. In general we can observe that double DQN brings less improvement than the dueling architecture. What we observe is that the performance of the different approaches vary strongly on a trial by trial basis. This is to be expected as the algorithm with a stochastic gradient. Even though all algorithms will converge to the optimal policy, the stochastic gradients do not guarantee that the fastest path to the optimal strategy will be followed. Hence to habe good comparison between the different implementations one needs to guarantee that the same environmental steps are shown to all agents. This of course is not possible in our setting and thus a comparison needs to be done over many trials. This was not done in this project due to large computational time needed.
 
+The environment was solved after **177 Episodes** but this was not the converging point of training. Letting the agents train for even longer periods of times showed significant improvement up to more than **35 point average** of reward.
 The trained Networks can be found in the [/Nets folder](https://github.com/androiddeverik/Deep-Reinforcement-Learning/tree/master/Navigation/Nets).
 
 
@@ -87,16 +88,7 @@ The trained Networks can be found in the [/Nets folder](https://github.com/andro
 
 <a name="future"></a>
 ## Future Improvements
-To further imrpove the already good results there are many different ideas and I would like to highlight two of them here.
-### Hierarchical RL
-In [hierarchical RL](https://arxiv.org/abs/1604.06057) we can divide the full task into smaller subtasks. In this case here we could consider the task to consist of two sub-objectives.
-#### Searching
-First we have to find the next yellow banana that we want to collect. This task can be optimized to find the best reachable banana from the current position. A scanning behavior would probably be helpful here.
-#### Navigation
-Once we have found a suitable banana, we need to take the shortest path to the banana without collecting any blue bananas.
+Future improvements would consist of testing the heterogeneous approach, using different actor-critic-models. A very intersting task would also be to learn this task from pixels, as this to me seems like a much harder task where the agent needs to learn 2D projections of the 3D world.
 
-In hierarchical RL we could train two networks to perfom the above task very well by themselfes. In a next step we then train an agent to decide when to do searching and when to do navigating. For some complex tasks it has been shown to improve performance if the task is divided into subtasks.
-
-
-### RAINBOW
-A much simpler improvement to the current model would be to implement even more enhancement to the DQN algorithm. One example would be to implement the full [RAINBOW](https://arxiv.org/pdf/1710.02298.pdf) algorithm
+## UnityML Environment
+To me it seemed overly complicated to use UnityML environment to train a task with only 33 dimensional input. Modeling a 2-joint robotic arm can easily be done using just numpy. My intuition would be that such an environment would perform much better than UnityML and thus training could be done much more efficiently. Given that reinforcement learning is still very sample inefficient I believe that more work should be invested in good simulation environments with high performance.
