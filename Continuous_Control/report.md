@@ -1,7 +1,7 @@
-# Report for training an RL-Agent on BananaBrain
+# Report for training an DDPG Agent to solve the Reacher Task
 ## Contents
 - [Overview Environment](#over)
-- [Q Learning](#qlearning)
+- [Actor-Critic Model](#qlearning)
 - [Setting up the Agent](#set)
 - [Training and Performance](#train)
 - [Future Improvements](#future)
