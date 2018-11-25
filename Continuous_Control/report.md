@@ -29,7 +29,7 @@ The barrier for solving the environment the agents must get an average score of 
 [actor-critic]:https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Continuous_Control/Images/A-regular-actor-critic-model-TD-temporal-difference.png
 ![architecture][actor-critic]
 
-Actor-Critic-Models fall in the calss between policy-based and value-based model. Models of this class take advantege from both different approaches.
+Actor-Critic-Models fall in the class between policy-based and value-based model. Models of this class take advantage from both different approaches.
 - **State**: A 33 Dimensional array representing position, velocity, acceleration and further information about the target position
 - **Action**: 4 Floats in the range [-1,1] representing the torque at each joint of the robot arm
 - **Reward**: Reward returned by the environment which depends on the state. It can take the values (0,0.1)
