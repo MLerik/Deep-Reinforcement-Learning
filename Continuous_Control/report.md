@@ -43,48 +43,37 @@ Actor-Critic-Models fall in the calss between policy-based and value-based model
 
 ### DDPG - Agent
 
-Given that the input state has both binary and real valued numbers and considering that discretizing this space would lead to a huge discrete state-space, I chose to implement the DQN agent using a [feed forward neural network](https://en.wikipedia.org/wiki/Feedforward_neural_network) for Q-Valuefunction approximation. Many functions such as memory, experience replay, step and so on were taken from the exercise code from the Udacity Nano Degree program.
+Because we have a continuous action and state space it makes sence to use a policy based method. Starting from the [example](https://github.com/udacity/deep-reinforcement-learning/tree/master/ddpg-pendulum) from the Udacity Deep Reinforcement Learning Nano Degree, we only need to make minor adjustments to get a good performing agent.
 
-#### Neural net as function approximator
+First adjustments are of course the state space and action space size, and the less straight forward adjustment is the modification to support 20 agents. I implemented two different approaches for training.
+#### Homogeneous Agents
+In this approach I assume all the 20 agents to be copies of each other. In other words we only need to [implement one DDPG-Agent](https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Continuous_Control/Agent/ddpg_agent.py) and just let it give actions to each individual state. If you combine this with one shared replay buffer, what you get is a rudimentary parallelization of training. These 20 agents explore 20 trajectories in parallel using the same policy.
+This approach was very successfull and the task was solved after **177 episodes**. It however has the drawback that the replay buffer only contains trajectories of one policy and thus exploration is not optimal.
 
-The general idea when using neural networks for Q-Learning is to approximate the Q-Value of each action-state-configuration. The state of the environment is fed as input to the neural network and the network returns a Q-Value estimation for all possible actions.
-
-Hence the input size to the neural network and the output size are given by the environment, in our case we have a 37 dimensional input and a 4 dimensional output.
-
-The structure of the neural network inbetween input and output, the so called hidden layers has to be chose appropriately and is part of the engineering necessary to get good performance.
-
-For the BananaBrain environment a neural network with 2 hidden layers with 64 hidden units each works well. The output of each layer (except the last layer) is passed through a non-linearity ([rectified linear unit in this case](https://en.wikipedia.org/wiki/Rectifier_(neural_networks))).
-
-To receive Q-Value estimations for a given state, a forward pass through the network is perfomed. In order to chose an action from these Q-Values we need a policy which the agent follows.
-
+#### Heterogeneous Agents
+In this approach I assume all the 20 agents to be individuals. [Here](https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Continuous_Control/Agent/ddpg_agent.py) I implemented a seperate neural network for each agent to represent each agents policy and only shared the replay buffer between all agents. With this approach we collect experiences from many different policies at the same time. Unfortunately I don't know how well this would behave because training was very slow and I had to abort before the task was solved. I hope to let a training run for longer times to see how it hold up.
 
 #### Final network structure
-[image3]:https://github.com/androiddeverik/Deep-Reinforcement-Learning/blob/master/Navigation/figs/neural_net.png
-![Network][image3]
-
-The image above illustrates the final network structure used for training and the table below shows the specific implementation and chosen parameters for each subnet.
-
-Layer | Action Value Net | State Value net
------------- | ------------ | -------------
-Input | 37 | 37
-Hidden 1 | 64 | 64
-Hidden 2 | 32 | 32
-Output | 4 | 1
 
 
 
 <a name="train"></a>
 ## Training and Performance
-Training was performed using the [Jupyter Notebook file](https://github.com/androiddeverik/Deep-Reinforcement-Learning/blob/master/Navigation/Navigation.ipynb) and all different implementations were compared to each other. For all implementations I used the same hyperparameters in order to be able to compare the state. For better comparison one would need to reset all the random number seeds of the agent and the environment to the same seed. 
+Training was performed using the [Jupyter Notebook file](https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Continuous_Control/Continuous_Control.ipynb) and can run locally on a decent laptop in less than 2 hours. Convergance and stability of this approach were very good.
 
 ### Hyperparameters
-- Learning Rate = 1e-5
-- Batch Size = 64
-- Discount factor gamma = 0.99
-- Soft update factor Tau = 1.e-3
-- Initial epsilon = 0.1
-- Minimal epsioln = 0.001
-- Epsilon decay = 0.99
+
+"
+- BUFFER_SIZE = int(1e6)  # replay buffer size
+- BATCH_SIZE = 1024  # minibatch size
+- GAMMA = 0.99  # discount factor
+- TAU = 1e-3  # for soft update of target parameters
+- LR_ACTOR = 5e-4  # learning rate of the actor
+- LR_CRITIC = 1e-3  # learning rate of the critic
+- WEIGHT_DECAY = 0  # L2 weight decay
+- LEARN_DELAY = 20  # Collect memories for n steps
+- LEARN_STEPS = 10  # Do n number of weight updates
+"
 
 ### Performance
 All the different implementations were compared. The best result (fastest reaching required 13+ point average) was achieved with the dueling DQN which reached the target after **239 Episodes**. In general we can observe that double DQN brings less improvement than the dueling architecture. What we observe is that the performance of the different approaches vary strongly on a trial by trial basis. This is to be expected as the algorithm with a stochastic gradient. Even though all algorithms will converge to the optimal policy, the stochastic gradients do not guarantee that the fastest path to the optimal strategy will be followed. Hence to habe good comparison between the different implementations one needs to guarantee that the same environmental steps are shown to all agents. This of course is not possible in our setting and thus a comparison needs to be done over many trials. This was not done in this project due to large computational time needed.
