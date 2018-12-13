@@ -85,8 +85,8 @@ Training was performed using the [Jupyter Notebook file](https://github.com/MLer
 
 ### Performance
 
-The environment was solved after **177 Episodes** but this was not the converging point of training. Letting the agents train for even longer periods of times showed significant improvement up to more than **35 point average** of reward.
-The trained Networks can be found in the [/Nets](https://github.com/androiddeverik/Deep-Reinforcement-Learning/tree/master/Navigation/Nets) folder.
+The environment was solved after **177 Episodes** but this was not the converging point of training. Letting the agents train for even longer showed the difficulty in convergence with multi agent reinforcement learning, where performance sometime became worse with more traiing.
+The trained Networks can be found in the [/Nets](https://github.com/androiddeverik/Deep-Reinforcement-Learning/tree/master/Tennis/Nets) folder.
 
 The figure below shows the average score over the last 100 epsiodes. 
 
