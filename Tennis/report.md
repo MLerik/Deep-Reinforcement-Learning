@@ -1,4 +1,4 @@
-# Report for training an DDPG Agent to solve the Reacher Task
+# Report for MARL Training on Tennis environment using DDPG
 ## Contents
 - [Overview Environment](#over)
 - [Actor-Critic Model](#qlearning)
@@ -12,7 +12,7 @@
 [image2]: https://user-images.githubusercontent.com/10624937/42135622-e55fb586-7d12-11e8-8a54-3c31da15a90a.gif "Soccer"
 
 
-# Project 3: Collaboration and Competition
+
 
 ### Introduction
 
@@ -39,29 +39,34 @@ The environment is considered solved, when the average (over 100 episodes) of th
 
 Because we have a continuous action and state space it makes sence to use a policy based method. Starting from the [example](https://github.com/udacity/deep-reinforcement-learning/tree/master/ddpg-pendulum) from the Udacity Deep Reinforcement Learning Nano Degree, we only need to make minor adjustments to get a good performing agent.
 
-First adjustments are of course the state space and action space size, and the less straight forward adjustment is the modification to support 20 agents. I implemented two different approaches for training.
+First adjustments are of course the state space and action space size, and the less straight forward adjustment is the modification to support 2 agents. I implemented two different approaches for training.
 
 Information on how to implement a DDPG-Agent can be found [here](https://arxiv.org/abs/1509.02971)
+
 #### Homogeneous Agents
-In this approach I assume all the 20 agents to be copies of each other. In other words we only need to [implement one DDPG-Agent](https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Continuous_Control/Agent/ddpg_agent.py) and just let it give actions to each individual state. If you combine this with one shared replay buffer, what you get is a rudimentary parallelization of training. These 20 agents explore 20 trajectories in parallel using the same policy.
+In this approach I assume all the 2 agents to be copies of each other. In other words we only need to [implement one DDPG-Agent](https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Continuous_Control/Agent/ddpg_agent.py) and just let it give actions to each individual state. If you combine this with one shared replay buffer, what you get is a rudimentary parallelization of training. These 2 agents explore 2 trajectories in parallel using the same policy.
 This approach was very successfull and the task was solved after **177 episodes**. It however has the drawback that the replay buffer only contains trajectories of one policy and thus exploration is not optimal.
 
+
 #### Heterogeneous Agents
-In this approach I assume all the 20 agents to be individuals. [Here](https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Continuous_Control/Agent/ddpg_agent.py) I implemented a seperate neural network for each agent to represent each agents policy and only shared the replay buffer between all agents. With this approach we collect experiences from many different policies at the same time. Unfortunately I don't know how well this would behave because training was very slow and I had to abort before the task was solved. I hope to let a training run for longer times to see how it hold up.
+In this approach I assume all the 2 agents to be individuals. [Here](https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Tennis/Agent/ddpg_agent.py) I implemented a seperate neural network for each agent to represent each agents policy and only shared the replay buffer between all agents. With this approach we collect experiences from many different policies at the same time. Unfortunately I don't know how well this would behave because training was very slow and I had to abort before the task was solved. I hope to let a training run for longer times to see how it hold up.
+
+#### Learning through self play
+To further improve stability of training, I let the agent performe so called self play where I only updated one of the two agents on a regular basis. The second agent was a copy of the first agent, which received a new copy every 100 episodes. In this way the policy of one agent stayed fixed during 100 trials, which produced slower but more stable learning.
 
 #### Final network structure
 I used two identical network setups for the actor and critic, except for the output layer. The actor outputs 4 values in [-1,1] whereas the critic only outputse a single value representing the state-action-value.
 
 Layer | Actor | Critic
 ------------ | ------------ | -------------
-Input | 33 | 33
+Input | 24 | 24
 Hidden 1 | 400 | 400
 Hidden 2 | 300 | 300
-Output | 4 | 1
+Output | 2 | 1
 
 <a name="train"></a>
 ## Training and Performance
-Training was performed using the [Jupyter Notebook file](https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Continuous_Control/Continuous_Control.ipynb) and can run locally on a decent laptop in less than 2 hours. Convergance and stability of this approach were very good.
+Training was performed using the [Jupyter Notebook file](https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Tennis/Tennis.ipynb) and can run locally on a decent laptop in less than 2 hours. Convergance and stability of this approach were very good.
 
 ### Hyperparameters
 ~~~~
@@ -85,7 +90,7 @@ The trained Networks can be found in the [/Nets](https://github.com/androiddever
 
 The figure below shows the average score over the last 100 epsiodes. 
 
-[image6]:https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Continuous_Control/Images/Training.png
+[image6]:https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Tennis/Images/Training.png
 ![Training][image6]
 
 
