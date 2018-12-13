@@ -98,5 +98,3 @@ The figure below shows the average score over the last 100 epsiodes.
 ## Future Improvements
 Future improvements would consist of testing the heterogeneous approach, using different actor-critic-models. A very intersting task would also be to learn this task from pixels, as this to me seems like a much harder task where the agent needs to learn 2D projections of the 3D world.
 
-## UnityML Environment
-To me it seemed overly complicated to use UnityML environment to train a task with only 33 dimensional input. Modeling a 2-joint robotic arm can easily be done using just numpy. My intuition would be that such an environment would perform much better than UnityML and thus training could be done much more efficiently. Given that reinforcement learning is still very sample inefficient I believe that more work should be invested in good simulation environments with high performance.
