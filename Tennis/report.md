@@ -1,52 +1,39 @@
-# Report for training an RL-Agent on BananaBrain
+# Report for training an DDPG Agent to solve the Reacher Task
 ## Contents
 - [Overview Environment](#over)
-- [Q Learning](#qlearning)
+- [Actor-Critic Model](#qlearning)
 - [Setting up the Agent](#set)
 - [Training and Performance](#train)
 - [Future Improvements](#future)
 
+[image1]: https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Continuous_Control/Images/reacher.gif "Environment"
 <a name="over"></a>
 ## Overview Environment
-[image1]: https://user-images.githubusercontent.com/10624937/42135619-d90f2f28-7d12-11e8-8823-82b970a54d7e.gif "Trained Agent"
-
-In this project I trained an agent to navigate (and collect bananas!) in a large, square world. As part of the Deep Reinforcement Learning Nano Degree @ Udacity.
+In this project I trained an multiple agents to solve the reacher task as part of the Deep Reinforcement Learning Nano Degree @ Udacity.
 Below you see a short sample gif of the environment as well as som details on how to get the Environment ready on your computer.
 
 ![Trained Agent][image1]
 
-A reward of +1 is provided for collecting a yellow banana, and a reward of -1 is provided for collecting a blue banana.  Thus, the goal of your agent is to collect as many yellow bananas as possible while avoiding blue bananas.  
+In this environment, a double-jointed arm can move to target locations. A reward of +0.1 is provided for each step that the agent's hand is in the goal location. Thus, the goal of your agent is to maintain its position at the target location for as many time steps as possible.
 
-The state space has 37 dimensions and contains the agent's velocity, along with ray-based perception of objects around agent's forward direction. Thus the state is made up of binary dimensions and real valued dimension!
+The observation space consists of 33 variables corresponding to position, rotation, velocity, and angular velocities of the arm. Each action is a vector with four numbers, corresponding to torque applicable to two joints. Every entry in the action vector should be a number between -1 and 1.
 
-Given this information, the agent has to learn how to best select actions.  Four discrete actions are available, corresponding to:
-- **`0`** - move forward.
-- **`1`** - move backward.
-- **`2`** - turn left.
-- **`3`** - turn right.
-
-The task is episodic, and in order to solve the environment, your agent must get an average score of +13 over 100 consecutive episodes.
+The barrier for solving the environment the agents must get an average score of +30 (over 100 consecutive episodes, and over all agents). Specifically,
+- After each episode, we add up the rewards that each agent received (without discounting), to get a score for each agent. This yields 20 (potentially different) scores. We then take the average of these 20 scores.
+- This yields an average score for each episode (where the average is over all 20 agents).
 
 
 <a name="qlearning"></a>
-## Q Learning
-Definition by Wikipedia:
+## Actor-Critic Model
+### Deep Deterministic Policy Gradients (DDPG)
+[actor-critic]:https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Continuous_Control/Images/A-regular-actor-critic-model-TD-temporal-difference.png
+![architecture][actor-critic]
 
-*[Q-learning](https://en.wikipedia.org/wiki/Q-learning) is a reinforcement learning technique used in machine learning. The goal of Q-Learning is to learn a policy, which tells an agent what action to take under what circumstances. It does not require a model of the environment and can handle problems with stochastic transitions and rewards, without requiring adaptations.*
-
-*For any finite Markov decision process (FMDP), Q-learning finds a policy that is optimal in the sense that it maximizes the expected value of the total reward over all successive steps, starting from the current state. Q-learning can identify an optimal action-selection policy for any given FMDP, given infinite exploration time and a partly-random policy. "Q" names the function that returns the reward used to provide the reinforcement and can be said to stand for the "quality" of an action taken in a given state*
-
-The aim of this algorithm is to maximise the future discounted reward. This means that we want to maximize sum over all future rewards. To achieve this we can perform the following update to our Q function:
-
-[image4]:https://github.com/androiddeverik/Deep-Reinforcement-Learning/blob/master/Navigation/figs/q_learning.svg
-![qupdate][image4]
-
-To perform this Q-Learning the agent needs to collect experiences, which means that the agent needs to interact with the environment. The interaction with the environment causes the environment to change and the agent receives an update about the new state of the environment as well as a reward depending on that state. Such a tuple for learning contains the following data
-
-- **State**: A 37 dimensional array containing all the available information about the current state of the environment
-- **Action**: An integere in the range [0,4] representing the action the agent took
-- **Reward**: Reward returned by the environment which depends on the state. It can take the values (-1,0,1)
-- **Next State**: A 37 dimensional array containing all the available information about the state of the environment after the action was executed
+Actor-Critic-Models fall in the class between policy-based and value-based model. Models of this class take advantage from both different approaches.
+- **State**: A 33 Dimensional array representing position, velocity, acceleration and further information about the target position
+- **Action**: 4 Floats in the range [-1,1] representing the torque at each joint of the robot arm
+- **Reward**: Reward returned by the environment which depends on the state. It can take the values (0,0.1)
+- **Next State**: A 33 dimensional array containing all the available information about the state of the environment after the action was executed
 - **Done** : True or False depending whether the episode has terminated or not. If Done is true there is no next state and the reward is not discounted!
 
 
@@ -54,91 +41,63 @@ To perform this Q-Learning the agent needs to collect experiences, which means t
 <a name="set"></a>
 ## Setting up the Agent
 
-### DQN - Agent
+### DDPG - Agent
 
-Given that the input state has both binary and real valued numbers and considering that discretizing this space would lead to a huge discrete state-space, I chose to implement the DQN agent using a [feed forward neural network](https://en.wikipedia.org/wiki/Feedforward_neural_network) for Q-Valuefunction approximation. Many functions such as memory, experience replay, step and so on were taken from the exercise code from the Udacity Nano Degree program.
+Because we have a continuous action and state space it makes sence to use a policy based method. Starting from the [example](https://github.com/udacity/deep-reinforcement-learning/tree/master/ddpg-pendulum) from the Udacity Deep Reinforcement Learning Nano Degree, we only need to make minor adjustments to get a good performing agent.
 
-#### Neural net as function approximator
+First adjustments are of course the state space and action space size, and the less straight forward adjustment is the modification to support 20 agents. I implemented two different approaches for training.
 
-The general idea when using neural networks for Q-Learning is to approximate the Q-Value of each action-state-configuration. The state of the environment is fed as input to the neural network and the network returns a Q-Value estimation for all possible actions.
+Information on how to implement a DDPG-Agent can be found [here](https://arxiv.org/abs/1509.02971)
+#### Homogeneous Agents
+In this approach I assume all the 20 agents to be copies of each other. In other words we only need to [implement one DDPG-Agent](https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Continuous_Control/Agent/ddpg_agent.py) and just let it give actions to each individual state. If you combine this with one shared replay buffer, what you get is a rudimentary parallelization of training. These 20 agents explore 20 trajectories in parallel using the same policy.
+This approach was very successfull and the task was solved after **177 episodes**. It however has the drawback that the replay buffer only contains trajectories of one policy and thus exploration is not optimal.
 
-Hence the input size to the neural network and the output size are given by the environment, in our case we have a 37 dimensional input and a 4 dimensional output.
-
-The structure of the neural network inbetween input and output, the so called hidden layers has to be chose appropriately and is part of the engineering necessary to get good performance.
-
-For the BananaBrain environment a neural network with 2 hidden layers with 64 hidden units each works well. The output of each layer (except the last layer) is passed through a non-linearity ([rectified linear unit in this case](https://en.wikipedia.org/wiki/Rectifier_(neural_networks))).
-
-To receive Q-Value estimations for a given state, a forward pass through the network is perfomed. In order to chose an action from these Q-Values we need a policy which the agent follows.
-
-#### Epsilon-greedy policy
-The so called epsilon-greedy policy is used to chose an action from the given Q-Value approximations. In this policy the agent will choose the action with the highest Q-Value with a probability of P(a(maxQ) = 1-epsilon and a random action with the probability of epsilon. This policy is good for training as it can be shown that it will converge to the optimal policy.
-
-#### Enhancements to basic DQN Network: Dueling DQN
-[image2]:https://github.com/androiddeverik/Deep-Reinforcement-Learning/blob/master/Navigation/figs/dueling.png
-
-In order to improve the performance of the DQN Network a minor addition can be done. By splitting the Q-Function into its to parts, namely state value estimation and action value estimation we can improve the behavior of the agent.
-![Dueling][image2]
-
-This is specially helpful when we have many states where no action leads to a better state. In these cases the split of the estimations helps, because the value of each state can be considered independently of the possible actions.
-
-This improvement can easily be implemented by splitting the neural network into two seperate streams. Both streams take the state as an input and are merged before the output. For merging we sum the action values with the state value and subtract the mean of the action values.
-
-
-#### Enhancements to basic DQN Network: Double DQN
-To reduce the problem of the moving target we can further enhance our network by seperating the prediction of the Q-Values and the Q-Value target generation. In other words we introduce a copy of the DQN network which has a slower weight update than our main network. We use this network to predict the Q-Values for the chosen actions instead of predicting the Q-Values with the same network which chooses the action.
-
-This improvement is simple implemented by generating a copy of the neural network and using this copied network to predict the Q-values. Furthermore an update strategy for this copied network needs to be implemented. In my case I chose to update the weights as a convex combination of the current network weights and the network weights of the trained network. In this case we end up with a slowly evovling network which keeps our Q-Value targets more stable during training.
+#### Heterogeneous Agents
+In this approach I assume all the 20 agents to be individuals. [Here](https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Continuous_Control/Agent/ddpg_agent.py) I implemented a seperate neural network for each agent to represent each agents policy and only shared the replay buffer between all agents. With this approach we collect experiences from many different policies at the same time. Unfortunately I don't know how well this would behave because training was very slow and I had to abort before the task was solved. I hope to let a training run for longer times to see how it hold up.
 
 #### Final network structure
-[image3]:https://github.com/androiddeverik/Deep-Reinforcement-Learning/blob/master/Navigation/figs/neural_net.png
-![Network][image3]
+I used two identical network setups for the actor and critic, except for the output layer. The actor outputs 4 values in [-1,1] whereas the critic only outputse a single value representing the state-action-value.
 
-The image above illustrates the final network structure used for training and the table below shows the specific implementation and chosen parameters for each subnet.
-
-Layer | Action Value Net | State Value net
+Layer | Actor | Critic
 ------------ | ------------ | -------------
-Input | 37 | 37
-Hidden 1 | 64 | 64
-Hidden 2 | 32 | 32
+Input | 33 | 33
+Hidden 1 | 400 | 400
+Hidden 2 | 300 | 300
 Output | 4 | 1
-
-
 
 <a name="train"></a>
 ## Training and Performance
-Training was performed using the [Jupyter Notebook file](https://github.com/androiddeverik/Deep-Reinforcement-Learning/blob/master/Navigation/Navigation.ipynb) and all different implementations were compared to each other. For all implementations I used the same hyperparameters in order to be able to compare the state. For better comparison one would need to reset all the random number seeds of the agent and the environment to the same seed. 
+Training was performed using the [Jupyter Notebook file](https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Continuous_Control/Continuous_Control.ipynb) and can run locally on a decent laptop in less than 2 hours. Convergance and stability of this approach were very good.
 
 ### Hyperparameters
-- Learning Rate = 1e-5
-- Batch Size = 64
-- Discount factor gamma = 0.99
-- Soft update factor Tau = 1.e-3
-- Initial epsilon = 0.1
-- Minimal epsioln = 0.001
-- Epsilon decay = 0.99
+~~~~
+- BUFFER_SIZE = int(1e6)  # replay buffer size
+- BATCH_SIZE = 1024  # minibatch size
+- GAMMA = 0.99  # discount factor
+- TAU = 1e-3  # for soft update of target parameters
+- LR_ACTOR = 5e-4  # learning rate of the actor
+- LR_CRITIC = 1e-3  # learning rate of the critic
+- WEIGHT_DECAY = 0  # L2 weight decay
+- LEARN_DELAY = 20  # Collect memories for n steps
+- LEARN_STEPS = 10  # Do n number of weight updates
+- OU-Noise MU = 0. # Each agent has an OU-Noise-Process for each of its possible actions (4)
+- Ou-Noise Sigma = 0.1 
+~~~~
 
 ### Performance
-All the different implementations were compared. The best result (fastest reaching required 13+ point average) was achieved with the dueling DQN which reached the target after **239 Episodes**. In general we can observe that double DQN brings less improvement than the dueling architecture. What we observe is that the performance of the different approaches vary strongly on a trial by trial basis. This is to be expected as the algorithm with a stochastic gradient. Even though all algorithms will converge to the optimal policy, the stochastic gradients do not guarantee that the fastest path to the optimal strategy will be followed. Hence to habe good comparison between the different implementations one needs to guarantee that the same environmental steps are shown to all agents. This of course is not possible in our setting and thus a comparison needs to be done over many trials. This was not done in this project due to large computational time needed.
 
-The trained Networks can be found in the [/Nets folder](https://github.com/androiddeverik/Deep-Reinforcement-Learning/tree/master/Navigation/Nets).
+The environment was solved after **177 Episodes** but this was not the converging point of training. Letting the agents train for even longer periods of times showed significant improvement up to more than **35 point average** of reward.
+The trained Networks can be found in the [/Nets](https://github.com/androiddeverik/Deep-Reinforcement-Learning/tree/master/Navigation/Nets) folder.
 
+The figure below shows the average score over the last 100 epsiodes. 
 
-[image6]:https://github.com/androiddeverik/Deep-Reinforcement-Learning/blob/master/Navigation/figs/Training_Final.png
+[image6]:https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Continuous_Control/Images/Training.png
 ![Training][image6]
 
 
 <a name="future"></a>
 ## Future Improvements
-To further imrpove the already good results there are many different ideas and I would like to highlight two of them here.
-### Hierarchical RL
-In [hierarchical RL](https://arxiv.org/abs/1604.06057) we can divide the full task into smaller subtasks. In this case here we could consider the task to consist of two sub-objectives.
-#### Searching
-First we have to find the next yellow banana that we want to collect. This task can be optimized to find the best reachable banana from the current position. A scanning behavior would probably be helpful here.
-#### Navigation
-Once we have found a suitable banana, we need to take the shortest path to the banana without collecting any blue bananas.
+Future improvements would consist of testing the heterogeneous approach, using different actor-critic-models. A very intersting task would also be to learn this task from pixels, as this to me seems like a much harder task where the agent needs to learn 2D projections of the 3D world.
 
-In hierarchical RL we could train two networks to perfom the above task very well by themselfes. In a next step we then train an agent to decide when to do searching and when to do navigating. For some complex tasks it has been shown to improve performance if the task is divided into subtasks.
-
-
-### RAINBOW
-A much simpler improvement to the current model would be to implement even more enhancement to the DQN algorithm. One example would be to implement the full [RAINBOW](https://arxiv.org/pdf/1710.02298.pdf) algorithm
+## UnityML Environment
+To me it seemed overly complicated to use UnityML environment to train a task with only 33 dimensional input. Modeling a 2-joint robotic arm can easily be done using just numpy. My intuition would be that such an environment would perform much better than UnityML and thus training could be done much more efficiently. Given that reinforcement learning is still very sample inefficient I believe that more work should be invested in good simulation environments with high performance.
