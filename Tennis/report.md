@@ -45,7 +45,7 @@ Information on how to implement a DDPG-Agent can be found [here](https://arxiv.o
 
 #### Homogeneous Agents
 In this approach I assume the 2 agents to be copies of each other. In other words we only need to [implement one DDPG-Agent](https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Tennis/Agent/ddpg_agent_homogeneous.py) and just let it give actions to each individual state. If you combine this with one shared replay buffer, what you get is a rudimentary parallelization of training. These 2 agents explore 2 trajectories in parallel using the same policy.
-This approach was very successfull and the task was solved after **177 episodes**. It however has the drawback that the replay buffer only contains trajectories of one policy and thus exploration is not optimal.
+This approach was very successfull and the task was solved after **2731 episodes**. It however has the drawback that the replay buffer only contains trajectories of one policy and thus exploration is not optimal.
 
 
 #### Heterogeneous Agents
@@ -66,7 +66,7 @@ Output | 2 | 1
 
 <a name="train"></a>
 ## Training and Performance
-Training was performed using the [Jupyter Notebook file](https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Tennis/Tennis.ipynb) and can run locally on a decent laptop in less than 2 hours. Convergance and stability of this approach were very good.
+Training was performed using the [Jupyter Notebook file](https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Tennis/Tennis.ipynb) and can run locally on a decent laptop in less than 2 hours. Convergance and stability of this approach were very good. With more Episodes the performance of the agent improved vastly.
 
 ### Hyperparameters
 ~~~~
@@ -85,7 +85,7 @@ Training was performed using the [Jupyter Notebook file](https://github.com/MLer
 
 ### Performance
 
-The environment was solved after **177 Episodes** but this was not the converging point of training. Letting the agents train for even longer showed the difficulty in convergence with multi agent reinforcement learning, where performance sometime became worse with more traiing.
+The environment was solved after **2731 Episodes** but this was not the converging point of training. Letting the agents train for even longer showed the difficulty in convergence with multi agent reinforcement learning, where performance sometime became worse with more traiing.
 The trained Networks can be found in the [/Nets](https://github.com/androiddeverik/Deep-Reinforcement-Learning/tree/master/Tennis/Nets) folder.
 
 The figure below shows the average score over the last 100 epsiodes. 
