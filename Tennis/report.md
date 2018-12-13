@@ -52,7 +52,7 @@ This approach was very successfull and the task was solved after **177 episodes*
 In this approach I assume the 2 agents to be individuals. [Here](https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Tennis/Agent/ddpg_agent.py) I implemented a seperate neural network for each agent to represent each agents policy and only shared the replay buffer between all agents. With this approach we collect experiences from many different policies at the same time. Unfortunately I don't know how well this would behave because training was very slow and I had to abort before the task was solved. I hope to let a training run for longer times to see how it hold up.
 
 #### Learning through self play
-To further improve stability of training, I let the agent performe so called self play where I only updated one of the two agents on a regular basis. The second agent was a copy of the first agent, which received a new copy every 20 episodes. In this way the policy of one agent stayed fixed during 20 trials, which produced slower but more stable learning.
+To further improve stability of training, I let the agent performe so called self play where I only updated one of the two agents on a regular basis. The second agent was a copy of the first agent, which received a new copy every 50 episodes. In this way the policy of one agent stayed fixed during 50 trials, which produced slower but more stable learning.
 
 #### Final network structure
 I used two identical network setups for the actor and critic, except for the output layer. The actor outputs 4 values in [-1,1] whereas the critic only outputse a single value representing the state-action-value.
