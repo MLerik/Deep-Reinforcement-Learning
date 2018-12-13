@@ -97,4 +97,5 @@ The figure below shows the average score over the last 100 epsiodes.
 <a name="future"></a>
 ## Future Improvements
 Future improvements would consist of testing the heterogeneous approach, using different actor-critic-models. A very intersting task would also be to learn this task from pixels, as this to me seems like a much harder task where the agent needs to learn 2D projections of the 3D world.
+It would be interesting to further investigate how convergance of MARL algorithms can be improved. Maybe we could also use reward-shaping to get better performance.
 
