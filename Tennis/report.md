@@ -44,12 +44,12 @@ First adjustments are of course the state space and action space size, and the l
 Information on how to implement a DDPG-Agent can be found [here](https://arxiv.org/abs/1509.02971)
 
 #### Homogeneous Agents
-In this approach I assume all the 2 agents to be copies of each other. In other words we only need to [implement one DDPG-Agent](https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Tennis/Agent/ddpg_agent_homogeneous.py) and just let it give actions to each individual state. If you combine this with one shared replay buffer, what you get is a rudimentary parallelization of training. These 2 agents explore 2 trajectories in parallel using the same policy.
+In this approach I assume the 2 agents to be copies of each other. In other words we only need to [implement one DDPG-Agent](https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Tennis/Agent/ddpg_agent_homogeneous.py) and just let it give actions to each individual state. If you combine this with one shared replay buffer, what you get is a rudimentary parallelization of training. These 2 agents explore 2 trajectories in parallel using the same policy.
 This approach was very successfull and the task was solved after **177 episodes**. It however has the drawback that the replay buffer only contains trajectories of one policy and thus exploration is not optimal.
 
 
 #### Heterogeneous Agents
-In this approach I assume all the 2 agents to be individuals. [Here](https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Tennis/Agent/ddpg_agent.py) I implemented a seperate neural network for each agent to represent each agents policy and only shared the replay buffer between all agents. With this approach we collect experiences from many different policies at the same time. Unfortunately I don't know how well this would behave because training was very slow and I had to abort before the task was solved. I hope to let a training run for longer times to see how it hold up.
+In this approach I assume the 2 agents to be individuals. [Here](https://github.com/MLerik/Deep-Reinforcement-Learning/blob/master/Tennis/Agent/ddpg_agent.py) I implemented a seperate neural network for each agent to represent each agents policy and only shared the replay buffer between all agents. With this approach we collect experiences from many different policies at the same time. Unfortunately I don't know how well this would behave because training was very slow and I had to abort before the task was solved. I hope to let a training run for longer times to see how it hold up.
 
 #### Learning through self play
 To further improve stability of training, I let the agent performe so called self play where I only updated one of the two agents on a regular basis. The second agent was a copy of the first agent, which received a new copy every 100 episodes. In this way the policy of one agent stayed fixed during 100 trials, which produced slower but more stable learning.
